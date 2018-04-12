@@ -17,6 +17,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride());
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/build/index.html'));
+});
 
 /** error handling middleware functions for dev and for prod */
 app.use((req, res, next) => {
@@ -47,7 +52,7 @@ app.use((error, req, res, next)=>{
   });
 });
 
-app.set('port', process.env.PORT || 6000);
+app.set('port', process.env.PORT || 5000);
 const server = app.listen(app.get('port'), ()=> {
   console.log('Server started...\nListening on port: ' + server.address().port);
 });

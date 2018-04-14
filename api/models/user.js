@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
     match: [/\S+@\S+\.S+/, 'is invalid'],
     index: true
   },
-  admin: {type: Boolean, default: false},
+  isAdmin: {type: Boolean, default: false},
   imageSrc: {
     type: String,
     default: './uploads/default/placeholder.jpeg'
@@ -63,7 +63,8 @@ UserSchema.methods.toAuthJSON = function(){
     username: this.username,
     email: this.email,
     token: this.generateJWT(),
-    imageSrc: this.imageSrc
+    imageSrc: this.imageSrc,
+    isAdmin: this.isAdmin
   }
 }
 

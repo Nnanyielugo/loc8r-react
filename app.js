@@ -10,15 +10,20 @@ const passport = require('passport');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+require('./api/db');
+require('./api/helpers/passport');
+const api = require('./api/routes/');
 const app = express();
 
 app.use(cors());
 app.use(logger('dev'));
+app.use('/uploads', express.static('uploads'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.use('/api', api);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
 });

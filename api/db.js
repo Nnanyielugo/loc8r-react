@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const URI = require('../config/config').DB_URL;
 
 mongoose.connect(URI);
-mongoose.set('debug', true);
+if(process.env.NODE_ENV !== 'test'){
+  mongoose.set('debug', true);
+}
 
 mongoose.connection.on('connected', () => {
   console.log('Mongoose connected to:', URI);

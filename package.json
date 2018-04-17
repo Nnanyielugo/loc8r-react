@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "test": "nyc mocha"
   },
   "engines": {
     "node": "~8.9.4",
@@ -30,6 +31,11 @@
     "slug": "^0.9.1"
   },
   "devDependencies": {
-    "morgan": "^1.9.0"
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.1.0",
+    "mockgoose": "^7.3.5",
+    "morgan": "^1.9.0",
+    "nyc": "^11.6.0"
   }
 }

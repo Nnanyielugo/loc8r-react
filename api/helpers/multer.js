@@ -3,7 +3,7 @@ const multer = require('multer');
 // multer config
 const storage = multer.diskStorage({
   destination: function(req, file, cb){
-    cb(null, '/uploads');
+    cb(null, './uploads');
   },
   filename: function(req, file, cb){
     cb(null, (Math.random() * Math.pow(36, 6) | 0).toString(36) + file.originalname);

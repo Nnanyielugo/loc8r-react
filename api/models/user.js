@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     lowercase: true,
     unique: true,
     required: [true, "can't be blank"],
-    match: [/\S+@\S+\.S+/, 'is invalid'],
+    match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true
   },
   isAdmin: {type: Boolean, default: false},
@@ -54,7 +54,7 @@ UserSchema.methods.generateJWT = function(){
     id: this._id,
     username: this.username,
     exp: parseInt(exp.getTime() / 1000)
-  })
+  }, secret)
 }
 
 UserSchema.methods.toAuthJSON = function(){

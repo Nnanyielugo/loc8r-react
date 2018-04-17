@@ -1,19 +1,23 @@
-const chai = require('chai');
-const expect = chai.expect;
-const chaiHttp = require('chai-http')
-chai.use(chaiHttp);
+const mongoose = require('mongoose');
+let config = require('../config/config');
 
+before(function(done){
+  
+  mongoose.connect(config.DB_URL);
+  const db = mongoose.connection;
 
-
-describe('Index test', function(){  
-  const app = require('../app');
-  it('Index', function(done){
-    chai.request(app)
-      .get('/')
-      .end((error, response) => {
-        if(error) done(error);
-        expect(response).to.not.have.status(400)
-        done()
-      })
-  })  
+  db.on('error', function(err){
+    console.log('Error connecting to', config.DB_URL + ': ' + err)
+  })
+  db.on('connected', function(){
+    console.log('Mongoose connected to', config.DB_URL)
+    done()
+  })
+  db.on('open', function(){
+    db.dropDatabase(function(err, result){
+      if(err){
+        console.log(err)
+      }
+    })
+  })
 })

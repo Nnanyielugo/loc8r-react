@@ -97,15 +97,9 @@ describe('User Routes', function(){
     })
   })
 
-  describe('Protected routes', function(){
+  describe('Testing Authentication', function(){
 
-    beforeEach(function(done){
-      User.remove({}, function(){
-        done()
-      })
-    });
-
-    it('Should register, login, check token and access /me route', function(done){
+    it('Should register, and login', function(done){
       chai.request(app)
         .post('/api/users/')
         .send(user)
@@ -125,22 +119,7 @@ describe('User Routes', function(){
             expect(response.body.user.email).to.equal(user.email)
             expect(response.body.user.token).to.exist;
 
-            let token = response.body.user.token;
-
-            chai.request(app)
-              .get('/api/users/me')
-              .set('Authorization', 'Bearer ' + token)
-              .end((err, res) => {
-                //console.log('Auth ', res.body)
-                expect(res).to.be.a('object')
-                expect(res.body.user.username).to.equal(user.username.toLowerCase())
-                expect(res.body.user.email).to.equal(user.email.toLowerCase())
-                expect(res.body.user.token).to.exist;
-                expect(res.body.user.token).to.be.a('string')
-                
-                done()
-              })
-              
+            done()              
           })
         })        
     })
@@ -198,9 +177,45 @@ describe('User Routes', function(){
           })
         })
     })
+  })
 
-    // it('Successfully logs in', function(done){
+  describe('Protected routes', function(){
+    let token;
+      const testUser = {
+        username: "kizzy",
+        email: "kizzy@email.com",
+        password : "kizito"
+      }
+      // let test = new User(testUser);
+  
+      beforeEach(function(done){  
+          chai.request(app)
+            .post('/api/users/')
+            .send(testUser)
+            .end((err, res)=> {
+              if(err) done(err)
+              //console.log(res.body)
+              token = res.body.user.token;
+              done()
+            })
       
-    // })
+      });
+
+      it('should access protected user route', function(done){
+        chai.request(app)
+          .get('/api/users/me')
+          .set('Authorization', 'Bearer ' + token)
+          .end((err, response)=> {
+            // console.log(response.body)
+            expect(response).to.have.status(200)
+            expect(response.body).to.have.property('user')
+            expect(response.body.user.username).to.equal(testUser.username)
+            expect(response.body.user.email).to.equal(testUser.email)
+            expect(response.body.user).to.have.property('token')
+            expect(response.body.user.token).to.not.be.null;
+            done()
+          })
+      })
+    
   })
 })

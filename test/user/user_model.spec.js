@@ -57,15 +57,11 @@ describe('User model', function(){
 
     describe('Create user tests', function(){
       beforeEach(function(done){
-        User.remove({}, function(){})
-        done()
-      })
-
-      afterEach(function(done){
         User.remove({}, function(){
           done()
         })
       })
+
       it('Should create user and the created fields should exist', function(){
         return new User(user).save().then(function(result){
           expect(result).to.exist;

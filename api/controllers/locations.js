@@ -61,7 +61,7 @@ module.exports.listLocationsByDistance = (req, res, next) => {
     });
 }
 
-module.exports.createLocation = (req, res, next) => {
+module.exports.create = (req, res, next) => {
   const location = new Locations({
     name: req.body.name,
     address: req.body.address,
@@ -89,4 +89,59 @@ module.exports.createLocation = (req, res, next) => {
     })
     .catch(next);
 
+}
+
+module.exports.readSingle = (req,res, next) => {
+  if(!req.params && !req.params.id){
+    return res.status(404).json({message: "No location id in request"})
+  }
+
+  Locations
+    .findById(req.params.id)
+    .exec()
+    .then(location => {
+      if(!location){
+        return res.status(404).json({message: "locationId not found"})
+      }
+      return res.status(200).json(location)
+    })
+    .catch(next)
+}
+
+module.exports.update = (req, res, next) => {
+  if(!req.params.id){
+    return res.status(400).send({message: "locationid required"})
+  }
+
+  Locations
+    .findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .select('-reviews -rating')
+    .exec()
+    .then(location => {
+      if(!location){
+        return res.status(404).json({message: "locationId not found"})
+      }
+
+      res.status(200).json(location)
+
+    })
+    .catch(next)
+}
+
+module.exports.delete = (req, res, next) => {
+  if(!req.params.id){
+    return res.status(404).json({message: 'location is required'})
+  }
+
+  Locations
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(location => {
+      if(!location){
+        return res.status(404).json({message: "locationId not found"})
+      }
+
+      return res.json({message: 'removed'})
+    })
+    .catch(next)
 }

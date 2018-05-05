@@ -19,7 +19,7 @@ module.exports.create = (req, res, next) => {
       return location.save().then(() => {
         let thisReview;
 
-        // updateAverateRating(location._id)
+        updateAverateRating(location._id)
         thisReview = location.reviews[location.reviews.length -1];
 
         return res.status(200).json(thisReview)
@@ -27,4 +27,28 @@ module.exports.create = (req, res, next) => {
       .catch(next)
     })
     .catch(next)
+}
+
+const updateAverateRating = (id) => {
+  Locations
+    .findById(id)
+    .select('rating reviews')
+    .exec()
+    .then(location => {
+      let i, reviewCount, ratingAverage, ratingTotal;
+      if(location.reviews && location.reviews.length > 1){
+        reviewCount = location.reviews.length;
+        ratingTotal = 0;
+        for(i = 0; i < reviewCount; i++){
+          ratingTotal = ratingTotal + location.reviews[i].rating;
+        }
+        ratingAverage = parseInt(ratingTotal/reviewCount, 10)
+        location.rating = ratingAverage;
+        
+        return location.save().then(() => console.log('reviews updated to', ratingAverage))
+      }
+    })
+    .catch((err) => {
+      console.log('There was an error', err)
+    })
 }

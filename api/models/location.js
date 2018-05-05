@@ -21,7 +21,7 @@ const LocationSchema = new mongoose.Schema({
   // slug: { type: String, lowercase: true, unique: true },
   name: { type: String, required: true },
   address: String,
-  rating: { type: Number, default: 0, min: 0, max: 0 },
+  rating: { type: Number, default: 0, min: 0, max: 5 },
   facilities: [String],
   favoritesCount: {type: Number, default: 0},
   coords: { type: [Number], index: '2dsphere', required: true },

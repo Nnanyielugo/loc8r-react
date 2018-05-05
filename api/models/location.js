@@ -8,33 +8,40 @@ const openingTimeSchema = new mongoose.Schema({
   opening: String,
   closing: String,
   closed: { type: Boolean, required: true }
+});
+
+const reviewSchema = new mongoose.Schema({
+  author: {type: String, required: true},
+  rating: {type: Number, required: true, min: 0, max: 5},
+  review: {type: String, required: true},
+  createdOn: {type: Date, "default": Date.now}
 })
 
 const LocationSchema = new mongoose.Schema({
-  slug: { type: String, lowercase: true, unique: true },
+  // slug: { type: String, lowercase: true, unique: true },
   name: { type: String, required: true },
   address: String,
   rating: { type: Number, default: 0, min: 0, max: 0 },
   facilities: [String],
   favoritesCount: {type: Number, default: 0},
   coords: { type: [Number], index: '2dsphere', required: true },
-  openingTImes: [openingTimeSchema],
-  uploadedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'reviews' }]
+  openingTimes: [openingTimeSchema],
+  // uploadedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  reviews: [reviewSchema]
 }, {timestamps: true});
 
 LocationSchema.plugin(uniqueValidator, {errors: 'is already taken'});
 
-LocationSchema.pre('validate', function(next){
-  if(!this.slug){
-    this.slugify();
-  }
-  next();
-});
+// LocationSchema.pre('validate', function(next){
+//   if(!this.slug){
+//     this.slugify();
+//   }
+//   next();
+// });
 
-LocationSchema.methods.slugify = function(){
-  this.slug = slug(this.name) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)
-}
+// LocationSchema.methods.slugify = function(){
+//   this.slug = slug(this.name) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)
+// }
 
 LocationSchema.methods.updateFavoriteCount = function(){
   const location = this;

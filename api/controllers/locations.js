@@ -1,4 +1,5 @@
 const Locations = require('mongoose').model('location');
+// const Review = require('mongoose').model('review')
 
 const earth = (function(){
   let radius = 6371; // kms
@@ -15,7 +16,27 @@ const earth = (function(){
     getDistanceFromRadians,
     getRadiansFromDistance
   }
-})()
+})();
+
+// module.exports.preloadPostId = (req, res, next, id) => {
+//   Locations.findById(id)
+//     // .populate('author')
+//     .then(location => {
+//       if(!location) {return res.status(404).json({errors: {error: "Location does not exist!"}});}
+//       // return res.status(200).json({Post: post})
+//       req.location = location;
+//       return next()
+//     })
+//     .catch(next)
+// }
+// module.exports.preloadCommentId = (req, res, next, id) => {
+//   Review.findById(id).then(function(review){
+//     if(!review) { return res.status(404).json({errors: {error: "Comment does not exist"}}) ; }
+
+//     req.review = review;
+//     return next();
+//   }).catch(next);
+// }
 
 module.exports.listLocationsByDistance = (req, res, next) => {
   let longitude = parseFloat(req.query.longitude);
@@ -80,6 +101,8 @@ module.exports.create = (req, res, next) => {
     }]
   });
 
+  console.log(req.body.days1, req.body.days2)
+
   // 3.601521 6.458985
 
   return location.save()
@@ -98,6 +121,7 @@ module.exports.readSingle = (req,res, next) => {
 
   Locations
     .findById(req.params.id)
+    .populate('review')
     .exec()
     .then(location => {
       if(!location){
@@ -145,3 +169,23 @@ module.exports.delete = (req, res, next) => {
     })
     .catch(next)
 }
+
+
+// module.exports.review_create = (req, res, next) => {
+//   const review = new Review({
+//     review: req.body.review,
+//     author: req.body.author,
+//     location: req.location,
+//     rating: req.body.rating
+//   });
+
+//   return review.save()
+//     .then(() => {
+//       req.location.reviews.push(review)
+//       // console.log(review)
+//       return req.location.save().then(() => {
+//         res.json(review)
+//       })
+//     })
+//     .catch(next)
+// }

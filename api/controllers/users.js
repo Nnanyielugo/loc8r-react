@@ -33,10 +33,10 @@ module.exports.signUp = (req, res, next) => {
 }
 
 module.exports.login = (req, res, next) => {
-  if(!req.body.user.email){
-    return res,status(422).json({errors: {error: "Email can't be blank"}});
+  if(!req.body.email){
+    return res.status(422).json({errors: {error: "Email can't be blank"}});
   }
-  if(!req.body.user.password){
+  if(!req.body.password){
     return res.status(422).json({errors: {error: "password can't be blank"}});
   }
 

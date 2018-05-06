@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const slug = require('slug');
 const User = mongoose.model('user');
 
 const openingTimeSchema = new mongoose.Schema({
@@ -18,7 +17,6 @@ const reviewSchema = new mongoose.Schema({
 })
 
 const LocationSchema = new mongoose.Schema({
-  // slug: { type: String, lowercase: true, unique: true },
   name: { type: String, required: true },
   address: String,
   rating: { type: Number, default: 0, min: 0, max: 5 },
@@ -31,17 +29,6 @@ const LocationSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 LocationSchema.plugin(uniqueValidator, {errors: 'is already taken'});
-
-// LocationSchema.pre('validate', function(next){
-//   if(!this.slug){
-//     this.slugify();
-//   }
-//   next();
-// });
-
-// LocationSchema.methods.slugify = function(){
-//   this.slug = slug(this.name) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)
-// }
 
 LocationSchema.methods.updateFavoriteCount = function(){
   const location = this;

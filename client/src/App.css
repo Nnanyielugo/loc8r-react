@@ -1,3 +1,7 @@
+body {
+  background-color: rgb(209, 208, 208);
+}
+
 .App {
   text-align: center;
 }
@@ -7,19 +11,15 @@
   height: 80px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+main {
+  margin-top: 65px;
+  box-sizing: border-box;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
+.center-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @keyframes App-logo-spin {

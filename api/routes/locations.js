@@ -4,10 +4,6 @@ const auth = require('../helpers/auth');
 const locations = require('../controllers/locations');
 const reviews = require('../controllers/reviews');
 
-// router.param('location', locations.preloadPostId)
-
-// router.param('review', locations.preloadCommentId);
-
 router.get('/', locations.listLocationsByDistance);
 router.post('/', locations.create);
 router.get('/:id', locations.readSingle);

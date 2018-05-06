@@ -1,1 +1,3 @@
-export { fetchLocationsByDistance } from './locations';
+export { 
+  fetchLocationsByDistance, 
+  fetchLocationById } from './locations';

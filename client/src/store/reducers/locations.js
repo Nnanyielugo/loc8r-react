@@ -1,7 +1,8 @@
 import * as types from '../actions/types';
 
 const initialState = {
-  locations: []
+  locations: [],
+  location: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         locations: action.locations
+      }
+    case types.LOAD_LOCATION_BY_ID:
+      return {
+        ...state,
+        location: action.location
       }
     default:
       return state;

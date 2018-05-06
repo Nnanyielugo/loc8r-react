@@ -61,16 +61,16 @@ module.exports.listLocationsByDistance = (req, res, next) => {
           'spherical': true,
           'distanceField': 'dist',
           'num': 10,
-          'maxDistance': earth.getRadiansFromDistance(20)
+          'maxDistance': earth.getRadiansFromDistance(2000000000)
         }
       }
     ], (err, results, stats)=> {
       let locations = [];
       if(err) return next(err)
       results.forEach(result => {
-        console.log(result)
+        // console.log(result)
         locations.push({
-          distance: result.dis,
+          distance: result.dist,
           name: result.name,
           address: result.address,
           rating: result.rating,
@@ -78,7 +78,8 @@ module.exports.listLocationsByDistance = (req, res, next) => {
           id: result._id
         })
       })
-      res.status(200).send(locations)
+      console.log(locations)
+      return res.status(200).send(locations)
     });
 }
 

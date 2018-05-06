@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
+import * as types from '../../store/actions/index';
 import LocationList from '../../Components/LocationList/LocationList';
 
 class LocationsList extends Component {
+
+  componentDidMount(){
+
+    const getPosition = (position) => {
+      console.log(position.coords)
+      return this.props.getCoords(position.coords.longitude, position.coords.latitude)
+    }
+
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(getPosition)
+    }
+  }
 
   ratingStars = number => {
     return (
@@ -34,10 +48,32 @@ class LocationsList extends Component {
   }
   
   render(){
+    let locations;
+    if(this.props.locations){
+      locations = this.props.locations.map(location => {
+        return <LocationList key={location.id} location={location} formatDistance={this.formatDistance} ratingStars={this.ratingStars}/>
+      })
+    }
+    
     return (
-      <LocationList formatDistance={this.formatDistance} ratingStars={this.ratingStars}/>
+      <div className="container">
+        <div className="banner"><big><b>Loc8r</b></big>&nbsp;Find places to work with wifi near you!</div>
+        {locations}
+      </div>
     )
   }
 }
 
-export default LocationsList;
+const mapStateToProps = state => {
+  return {
+    locations: state.locations.locations
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCoords: (longitude, latitude) => dispatch(types.fetchLocationsByDistance(longitude, latitude))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (LocationsList);

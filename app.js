@@ -15,6 +15,7 @@ require('./api/helpers/passport');
 const api = require('./api/routes/');
 const app = express();
 
+// app.options('*', cors())
 app.use(cors());
 app.use(logger('dev'));
 app.use('/uploads', express.static('uploads'))

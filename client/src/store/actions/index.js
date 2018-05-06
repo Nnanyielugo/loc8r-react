@@ -1,0 +1,1 @@
+export { fetchLocationsByDistance } from './locations';
